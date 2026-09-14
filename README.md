@@ -47,3 +47,61 @@ Input (32, 32, 3)
   -> Dense(10, softmax)
 ```
 In contrast to the DNN, here a functional API is used - primarily to support the residual block's `Add()` step which needs its own input later in the graph.
+
+- **Conv2D -> BatchNorm -> ReLU.** BatchNorm normalizes pre-activation values before the nonlinearity.
+- **One residual connection.** Deep networks can lose gradient signal on the way back to early layers (vanishing gradients), stalling their learning. A skip connection gives the gradient a direct path around two conv layers. One block is enough to see the idea at this scale; a full ResNet stack would be excessive for a 10-class, 32x32 problem.
+- **GlobalAveragePooling2D** Averages each feature map to one number - this is what keeps the parameter count low and pushes the conv layers to learn what matters, rather than leaving that to a huge Dense layer.
+- **Learning rate 0.0001, not Keras's 0.001 default.** Carried over from a debugging finding on the DNN and confirmed to hold here too.
+
+**Parameters: 169,802** - about a fifth of the DNN's, in a deeper architecture.
+
+## 5. Setup and Usage
+ 
+```bash
+pip install -r requirements.txt
+```
+ 
+```python
+from data_util import load_image_data
+(x_train, y_train), (x_val, y_val), (x_test, y_test) = load_image_data()
+```
+ 
+Downloads SVHN via `tensorflow_datasets` on the first run, and caches locally after. Run either notebook till the end.
+
+## 6. Results
+ 
+| | DNN | CNN |
+|---|---:|---:|
+| Test accuracy | 70.6% | **90.1%** |
+| Parameters | 820,874 | 169,802 |
+ 
+ 
+### Where the CNN's gains actually came from
+ 
+| Digit | DNN recall | CNN recall | Gain |
+|---|---:|---:|---:|
+| 0 | 0.60 | 0.90 | +0.30 |
+| 1 | 0.88 | 0.96 | +0.08 |
+| 2 | 0.82 | 0.94 | +0.12 |
+| 3 | 0.60 | 0.86 | +0.26 |
+| 4 | 0.80 | 0.92 | +0.12 |
+| 5 | 0.54 | 0.87 | +0.33 |
+| 6 | 0.60 | 0.86 | +0.26 |
+| 7 | 0.66 | 0.92 | +0.26 |
+| 8 | 0.57 | 0.78 | +0.21 |
+| 9 | 0.59 | 0.85 | +0.26 |
+
+The biggest gains for the CNN are for the digits that the DNN struggled with the most (for example, 5,3,6,7, and 9).
+
+### A debugging note
+ 
+The DNN's first run stalled flat at ~19% accuracy, with every prediction collapsing to the most common digit in the dataset. While this looked like a data bug at first - it was ruled out by checking the label distribution and spot-checking images against labels directly. The real cause was that Keras's default learning rate (0.001) was too large for a network with a very wide first Dense layer (3,072 flattened inputs into 256 neurons), so training oscillated instead of converging. Dropping to a learning rate of 0.0001 fixed it immediately. The same value was used with the CNN as a starting point and confirmed it worked there too.
+ 
+## 7. Known Limitations
+ 
+- No transfer learning comparison.
+- One residual block, not a full ResNet stack.
+- No hyperparameter tuning.
+
+## License
+MIT
