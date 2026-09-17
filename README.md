@@ -1,10 +1,10 @@
 # SVHN Digit Classification: DNN vs. CNN
 
-This repo includes a comparison of two architectures on the same digit-classification problem, built to understand the imapct of architecture choice for image data. The same data, same splits, and same evaluation code are used for both models with architecture being the only major difference between the two.
+This repo includes a comparison of two architectures on the same digit-classification problem, built to understand the impact of architecture choice for image data. The same data, same splits, and same evaluation code are used for both models with architecture being the only major difference between the two.
 
 ## 1. Problem Statement
 
-[SVHN](http://ufldl.stanford.edu/housenumbers/) is a 10-class digit recognition dataset built from real photos of house numbers, cropped to individual digits. The usgae of real images makes this dataset harder than MNIST due to the color images, cluttered backgrounds, and inconsistent lighting. In addition, the data is skewed with more instances of the digits 1 and 2 compared to the others.
+[SVHN](http://ufldl.stanford.edu/housenumbers/) is a 10-class digit recognition dataset built from real photos of house numbers, cropped to individual digits. The usage of real images makes this dataset harder than MNIST due to the color images, cluttered backgrounds, and inconsistent lighting. The data is also imbalanced - digit `1` has roughly 3x as many training examples as the rarest classes.
  
 - **Classes:** 10 (digits 0-9)
 - **Train:** 65,932 images
@@ -91,7 +91,7 @@ Downloads SVHN via `tensorflow_datasets` on the first run, and caches locally af
 | 8 | 0.57 | 0.78 | +0.21 |
 | 9 | 0.59 | 0.85 | +0.26 |
 
-The biggest gains for the CNN are for the digits that the DNN struggled with the most (for example, 5,3,6,7, and 9).
+The biggest gains for the CNN are on the digits the DNN struggled with most (`5`, `6`, `9`) - which also happen to be among the least-represented classes in training. The DNN's strongest classes (`1`, `2`) are the most frequent ones, suggesting it was leaning on class frequency where it couldn't rely on spatial cues.
 
 ### A debugging note
  
