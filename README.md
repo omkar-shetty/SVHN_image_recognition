@@ -55,6 +55,8 @@ In contrast to the DNN, here a functional API is used - primarily to support the
 
 **Parameters: 169,802** - about a fifth of the DNN's, in a deeper architecture.
 
+<img src="images/cnn_architecture.png" alt="CNN architecture" width="400">
+
 ## 5. Setup and Usage
  
 ```bash
@@ -72,10 +74,13 @@ Downloads SVHN via `tensorflow_datasets` on the first run, and caches locally af
  
 | | DNN | CNN |
 |---|---:|---:|
-| Test accuracy | 70.6% | **90.1%** |
+| Test accuracy | 70.6% | 90.1% |
 | Parameters | 820,874 | 169,802 |
  
- 
+<img src="images/dnn_training_curves.png" alt="DNN Training" width="800">
+<img src="images/cnn_training_curves.png" alt="CNN Training" width="800">
+
+
 ### Where the CNN's gains actually came from
  
 | Digit | DNN recall | CNN recall | Gain |
@@ -92,6 +97,13 @@ Downloads SVHN via `tensorflow_datasets` on the first run, and caches locally af
 | 9 | 0.59 | 0.85 | +0.26 |
 
 The biggest gains for the CNN are on the digits the DNN struggled with most (`5`, `6`, `9`) - which also happen to be among the least-represented classes in training. The DNN's strongest classes (`1`, `2`) are the most frequent ones, suggesting it was leaning on class frequency where it couldn't rely on spatial cues.
+
+<img src="images/dnn_confusion_matrix.png" alt="DNN Confusion Matrix" width="400">
+<img src="images/cnn_confusion_matrix.png" alt="CNN Confusion Matrix" width="400">
+
+### Sample Results
+
+<img src="images/cnn_sample_predictions.png" alt="CNN Sample Predictions" width="600">
 
 ### A debugging note
  
