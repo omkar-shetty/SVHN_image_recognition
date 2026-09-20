@@ -4,7 +4,7 @@ This repo includes a comparison of two architectures on the same digit-classific
 
 ## 1. Problem Statement
 
-[SVHN](http://ufldl.stanford.edu/housenumbers/) is a 10-class digit recognition dataset built from real photos of house numbers, cropped to individual digits. The usage of real images makes this dataset harder than MNIST due to the color images, cluttered backgrounds, and inconsistent lighting. The data is also imbalanced - digit `1` has roughly 3x as many training examples as the rarest classes.
+[SVHN](http://ufldl.stanford.edu/housenumbers/) is a 10-class digit recognition dataset built from real photos of house numbers, cropped to individual digits. The usage of real images makes this dataset harder than MNIST due to the colour images, cluttered backgrounds, and inconsistent lighting. The data is also imbalanced - digit `1` has roughly 3x as many training examples as the rarest classes.
  
 - **Classes:** 10 (digits 0-9)
 - **Train:** 65,932 images
@@ -96,13 +96,17 @@ Downloads SVHN via `tensorflow_datasets` on the first run, and caches locally af
 | 8 | 0.57 | 0.78 | +0.21 |
 | 9 | 0.59 | 0.85 | +0.26 |
 
-The biggest gains for the CNN are on the digits the DNN struggled with most (`5`, `6`, `9`) - which also happen to be among the least-represented classes in training. The DNN's strongest classes (`1`, `2`) are the most frequent ones, suggesting it was leaning on class frequency where it couldn't rely on spatial cues.
+The biggest gains for the CNN are on the digits the DNN struggled with most (`5`, `6`, `9`) - which also happen to be among the least-represented classes in training. Broadly speaking, less-represented classes tend to see the DNN struggle more.
 
 <img src="images/dnn_confusion_matrix.png" alt="DNN Confusion Matrix" width="400">
 <img src="images/cnn_confusion_matrix.png" alt="CNN Confusion Matrix" width="400">
 
 ### Sample Results
 
+#### DNN results for the sample images
+<img src="images/dnn_sample_predictions.png" alt="DNN Sample Predictions" width="600">
+
+#### CNN results for the sample images
 <img src="images/cnn_sample_predictions.png" alt="CNN Sample Predictions" width="600">
 
 ### A debugging note
